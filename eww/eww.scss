@@ -1,0 +1,150 @@
+/* ===== VARIABLES ===== */
+// Darker background to match image
+$bg-color: rgba(20, 22, 30, 0.95);
+$text-primary: #ffffff;
+$text-secondary: rgba(255, 255, 255, 0.6);
+// Accent color for progress bar fill
+$accent: #cba6f7;
+$font: "JetBrains Mono Nerd Font", sans-serif;
+
+/* ===== RESET & GLOBAL ===== */
+* {
+  all: unset;
+  font-family: $font;
+}
+
+
+window {
+  background-color: transparent;
+}
+
+/* ===== MAIN CONTAINER ===== */
+.music-widget-container {
+  background-color: $bg-color;
+  border-radius: 24px;
+  padding: 25px;
+  // Subtle border to define edges
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* ===== TOP ICONS ===== */
+.top-icons-row {
+  margin-bottom: 20px;
+}
+
+/* ===== MID SECTION (Art & Text) ===== */
+.mid-section-row {
+  margin-bottom: 25px;
+}
+
+// The square album art
+.cover-art-box {
+  min-width: 110px;
+  min-height: 110px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 16px;
+  // Slight shadow on the art itself
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+// Song Title
+.song-title-lbl {
+  font-size: 16px;
+  font-weight: 700;
+  color: $text-primary;
+  margin-bottom: 5px;
+}
+
+// Artist Name
+.song-artist-lbl {
+  font-size: 13px;
+  font-weight: 500;
+  color: $text-secondary;
+  margin-bottom: 15px;
+}
+
+/* ===== CONTROLS ===== */
+// General button reset
+button {
+  //cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+// Top and Bottom row icons (Heart, settings, shuffle, etc)
+.secondary-icon {
+  color: $text-secondary;
+  font-size: 16px;
+}
+.secondary-icon:hover {
+    color: $text-primary;
+}
+
+// Main Prev/Next buttons
+.prev-next {
+  color: $text-primary;
+  font-size: 22px;
+}
+.prev-next:hover {
+   color: $accent;
+}
+
+// The big central play button
+.play-pause {
+  color: $text-primary;
+  font-size: 32px;
+}
+.play-pause:hover {
+    color: $accent;
+}
+
+
+/* ===== BOTTOM SECTION & PROGRESS BAR ===== */
+.bottom-section-col {
+    margin-top: 10px;
+}
+
+// Time labels (0:00 / 3:45)
+.time-lbl {
+  font-size: 11px;
+  font-weight: 600;
+  color: $text-secondary;
+  margin-bottom: 8px;
+}
+
+// --- Progress Scale Styling ---
+
+scale.progress-bar-scale {
+    // Ensure it takes full width
+    margin-right: 0px;
+}
+
+// The background track of the bar
+scale.progress-bar-scale trough {
+  min-height: 4px;
+  min-width: 10px; // Ensure it renders
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+// The filled part of the bar
+scale.progress-bar-scale highlight {
+  background-color: $text-primary; // Solid white fill based on image
+  border-radius: 10px;
+}
+
+// The knob/handle at the end of the progress
+scale.progress-bar-scale slider {
+  min-height: 12px;
+  min-width: 12px;
+  background-color: $text-primary;
+  border-radius: 50%;
+  margin: -4px -6px; // Center the knob vertically on the thin track
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+// Bottom row buttons spacing
+.secondary-controls-row {
+    margin-top: 5px;
+}

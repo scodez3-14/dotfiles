@@ -1,0 +1,107 @@
+;; =========================
+;; LISTENERS & POLLS
+;; =========================
+
+(deflisten song_title :initial "No Music Playing"
+  "playerctl metadata --format '{{title}}' --follow 2>/dev/null || echo 'No Music Playing'")
+
+(deflisten song_artist :initial "Unknown Artist"
+  "playerctl metadata --format '{{artist}}' --follow 2>/dev/null || echo 'Unknown Artist'")
+
+(deflisten player_status :initial "Stopped"
+  "playerctl metadata --format '{{status}}' --follow 2>/dev/null || echo 'Stopped'")
+
+;; Length in seconds for the slider max value
+(defpoll song_length_s :interval "2s"
+  "playerctl metadata mpris:length 2>/dev/null | awk '{print $1/1000000}' || echo 1")
+
+;; Current position in seconds for slider value
+(defpoll song_position_s :interval "1s"
+  "playerctl position 2>/dev/null || echo 0")
+
+;; Formatted Current Position (e.g. 1:23)
+(defpoll formatted_position :interval "1s"
+  "playerctl position -f '{{duration(position)}}' 2>/dev/null || echo '0:00'")
+
+;; NEW: Formatted Total Length (e.g. 3:45)
+(defpoll song_length_formatted :interval "2s"
+  "playerctl metadata --format '{{duration(mpris:length)}}' 2>/dev/null || echo '0:00'")
+
+(defpoll cover_art_path :interval "2s"
+  "$HOME/.config/eww/get-cover.sh || echo '$HOME/.config/eww/default_cover.png'")
+
+;; =========================
+;; WIDGET DEFINITION
+;; =========================
+
+(defwidget music-widget []
+  (box :class "music-widget-container" :orientation "v" :space-evenly false
+
+    ;; --- SECTION 1: TOP ICONS ---
+    (box :class "top-icons-row" :orientation "h" :halign "fill"
+      (button :class "icon-btn secondary-icon" "♡") ;; Placeholder favorite
+      (box :hexpand true) ;; Spacer
+      (button :class "icon-btn secondary-icon" "☼") ;; Placeholder settings
+    )
+
+    ;; --- SECTION 2: MID SECTION (Art + Info + Main Controls) ---
+    (box :class "mid-section-row" :orientation "h" :space-evenly false :spacing 20
+      ;; Album Art
+      (box :class "cover-art-box"
+           :style "background-image: url('${cover_art_path}');")
+
+      ;; Info & Main Controls Column
+      (box :class "info-controls-col" :orientation "v" :space-evenly false :valign "center"
+        (label :class "song-title-lbl" :text song_title :limit-width 20 :halign "start")
+        (label :class "song-artist-lbl" :text song_artist :limit-width 20 :halign "start")
+
+        ;; Main Controls (Prev, Play, Next)
+        (box :class "main-controls-row" :orientation "h" :spacing 15 :halign "start"
+          (button :class "ctrl-btn prev-next" :onclick "playerctl previous" "󰒮")
+          (button :class "ctrl-btn play-pause" :onclick "playerctl play-pause"
+            {player_status == "Playing" ? "󰏤" : "󰐊"})
+          (button :class "ctrl-btn prev-next" :onclick "playerctl next" "󰒭")
+        )
+      )
+    )
+
+    ;; --- SECTION 3: BOTTOM SECTION (Times, Progress, Secondary Controls) ---
+    (box :class "bottom-section-col" :orientation "v" :space-evenly false :spacing 10
+
+       ;; Time Labels Row
+       (box :class "time-labels-row" :orientation "h"
+         (label :class "time-lbl" :text formatted_position)
+         (box :hexpand true) ;; Spacer to push times to edges
+         (label :class "time-lbl" :text song_length_formatted)
+       )
+
+       ;; Progress Bar
+       (scale :class "progress-bar-scale"
+              :min 0
+              :max song_length_s
+              :value song_position_s
+              :onchange "playerctl position {}")
+
+       ;; Secondary Controls (Shuffle/Repeat placeholder)
+       (box :class "secondary-controls-row" :orientation "h" :spacing 20 :halign "center"
+         (button :class "icon-btn secondary-icon" "󰒟") ;; Shuffle icon
+         (button :class "icon-btn secondary-icon" "󰑖") ;; Repeat icon
+       )
+    )
+  )
+)
+
+
+;; =========================
+;; WINDOW DEFINITION
+;; =========================
+
+(defwindow music
+  :monitor 0
+  :wm-ignore true
+  ;; Ensure background is transparent here so rounded corners work in SCSS
+  :background "transparent"
+  :stacking "fg" ;; Ensure it's on top
+  :geometry (geometry :x "20px" :y "20px" :width "320px" :height "340px")
+  (music-widget)
+)
