@@ -9,5 +9,5 @@ Not fully written by me
 
 <img width="1921" height="1081" alt="2025-12-22_20-31-40" src="https://github.com/user-attachments/assets/b4f5df85-ac62-49ef-862e-2799dc4bf796" />
 
-<img width="1920" height="1080" alt="screenshot-2025-12-24T13-32-41" src="https://github.com/user-attachments/assets/4cbc727e-0339-4e2e-b05c-3f3c2fa9cba8" />
 
+<img width="1921" height="1078" alt="2025-12-25_17-57-51" src="https://github.com/user-attachments/assets/913296da-d374-473e-bf11-4970dca42dd8" />
